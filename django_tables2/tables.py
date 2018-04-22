@@ -211,12 +211,19 @@ class TableBase(object):
 
         extra_columns (str, `.Column`): list of `(name, column)`-tuples containing
             extra columns to add to the instance.
+
+        fields (iterable or str): List of 'name's specifies a subset of the tables columns to be displayed.
+        Does not add any new columns to the table
+
+        :type: iterable
+
+
     '''
     def __init__(self, data=None, order_by=None, orderable=None, empty_text=None,
                  exclude=None, attrs=None, row_attrs=None, pinned_row_attrs=None,
                  sequence=None, prefix=None, order_by_field=None, page_field=None,
                  per_page_field=None, template=None, template_name=None, default=None, request=None,
-                 show_header=None, show_footer=True, extra_columns=None):
+                 show_header=None, show_footer=True, extra_columns=None, fields=None):
         super(TableBase, self).__init__()
 
         # note that although data is a keyword argument, it used to be positional
@@ -260,6 +267,12 @@ class TableBase(object):
         if extra_columns is not None:
             for name, column in extra_columns:
                 base_columns[name] = column
+
+        # If the fields value is defined, remove all fields from the table
+        # that are not in the fields list. Does, however, not add any new
+        # columns.
+        if fields is not None:
+            self.base_columns = dict( [(x,y) for x,y in self.base_columns.items() if x in fields] )
 
         # Keep fully expanded ``sequence`` at _sequence so it's easily accessible
         # during render. The priority is as follows:
