@@ -272,7 +272,7 @@ class TableBase(object):
         # that are not in the fields list. Does, however, not add any new
         # columns.
         if fields is not None:
-            self.base_columns = dict( [(x,y) for x,y in self.base_columns.items() if x in fields] )
+            base_columns = dict( [(x,y) for x,y in base_columns.items() if x in fields] )
 
         # Keep fully expanded ``sequence`` at _sequence so it's easily accessible
         # during render. The priority is as follows:
